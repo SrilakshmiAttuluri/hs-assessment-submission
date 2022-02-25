@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  replicas:  {{ .Values.service.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: "{{ .Values.service.docker_image_repository }}:{{ .Values.service.docker_image_tag }}"
+        imagePullPolicy: {{ .Values.service.docker_image_pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+        {{- if .Values.healthcheck}}
+        {{- if .Values.healthcheck.url}}      
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.healthcheck.url}}
+            port: {{ .Values.service.port}}
+          {{- if .Values.healthcheck.initialDelayinProbes}}
+          initialDelaySeconds: {{ .Values.healthcheck.initialDelayinProbes}}
+          {{- end }}
+          {{- if .Values.healthcheck.timeout}}
+          timeoutSeconds: {{ .Values.healthcheck.timeout | int}} 
+          {{- end }}
+          {{- if .Values.healthcheck.failureThreshold}} 
+          failureThreshold: {{ .Values.healthcheck.failureThreshold | int}} 
+          {{- end }}
+        readinessProbe:
+           httpGet:
+            path: {{ .Values.healthcheck.url}}
+            port: {{ .Values.service.port}}  
+          {{- if .Values.healthcheck.initialDelayinProbes}}
+           initialDelaySeconds: {{ .Values.healthcheck.initialDelayinProbes}}
+          {{- end }}      
+          {{- if .Values.healthcheck.timeout }}
+           timeoutSeconds: {{ .Values.healthcheck.timeout | int}} 
+          {{- end }}   
+          {{- if .Values.healthcheck.failureThreshold}} 
+           failureThreshold: {{ .Values.healthcheck.failureThreshold | int}} 
+          {{- end }}    
+         {{- end }}     
+         {{- end }} 
+        {{- if .Values.resources }}
+        resources:
+         {{ toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+        {{- if or .Values.secret_env .Values.env }} 
+        envFrom:
+        {{- if .Values.secret_env }} 
+        - secretRef:
+           name: {{ .Release.Name }}
+       {{- end }}
+       {{- end }}
+        {{- if  .Values.env }} 
+        - configMapRef:
+           name: {{ .Release.Name }}     
+       {{- end }} 

@@ -1,0 +1,31 @@
+service:    # Required to create a deployment for the app
+  docker_image_repository: srilakshmiattuluri/hsassessment # docker image for the app
+  docker_image_tag: latest # image tag
+  docker_image_pullPolicy: IfNotPresent 
+  customStartUp: null # if need to excute a specific command on pod startup
+  replicaCount: 2 # number of replicas to run for an app
+  port: 4444
+  type: ClusterIP # type of service to be created for an app, by default it is ClusterIP
+
+healthcheck: # to enable liveness and readiness probes
+  url: /healthz # route to check health of an app
+  initialDelayinProbes: 30  
+  timeout: 10
+  failureThreshold: 5
+
+env:  # to create configmaps which holds env values for app
+  test_config: "testing"
+
+secret_env: # will create secret in kubernetes for the app
+  active-profile: $(active-profile)
+
+autoscaling: # to scale the pods automatically
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80 # condition for scaling for CPU
+  targetMemoryUtilizationPercentage: 80 # condition for scaling for Memory
+
+resources: # specify the resources required by an app on startup
+  requests:
+    cpu: 100m
+    memory: 100Mi
