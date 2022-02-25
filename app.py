@@ -25,9 +25,9 @@ def Authenticate():
                                                   pool_size=5,
                                                   pool_reset_session=True,
                                                   host='db',
-                                                  database=os.env('database_name'),
-                                                  user=os.env('user_name'),
-                                                  password=os.env('password'),
+                                                  database=os.env('MYSQL_DATABASE'),
+                                                  user=os.env('MYSQL_USER'),
+                                                  password=os.env('MYSQL_ROOT_PASSWORD'),
                                                   auth_plugin='mysql_native_password')
       print("Printing connection pool properties ")
       print("Connection Pool Name - ", connection_pool.pool_name)
