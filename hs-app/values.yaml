@@ -5,7 +5,7 @@ service:    # Required to create a deployment for the app
   customStartUp: null # if need to excute a specific command on pod startup
   replicaCount: 2 # number of replicas to run for an app
   port: 4444
-  type: ClusterIP # type of service to be created for an app, by default it is ClusterIP
+  type: NodePort # type of service to be created for an app, by default it is ClusterIP
 
 healthcheck: # to enable liveness and readiness probes
   url: /healthz # route to check health of an app
