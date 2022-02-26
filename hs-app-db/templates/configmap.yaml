@@ -1,0 +1,10 @@
+{{- if .Values.env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mysql
+data:
+  {{- range $key, $val := .Values.env }}
+  {{ $key }}: {{ $val | quote }}
+  {{- end }}
+{{ end }}

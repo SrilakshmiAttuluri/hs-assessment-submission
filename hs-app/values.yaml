@@ -3,7 +3,7 @@ service:    # Required to create a deployment for the app
   docker_image_tag: latest # image tag
   docker_image_pullPolicy: IfNotPresent 
   customStartUp: null # if need to excute a specific command on pod startup
-  replicaCount: 2 # number of replicas to run for an app
+  replicaCount: 1 # number of replicas to run for an app
   port: 4444
   type: NodePort # type of service to be created for an app, by default it is ClusterIP
 
@@ -29,14 +29,3 @@ resources: # specify the resources required by an app on startup
   requests:
     cpu: 100m
     memory: 100Mi
-
-mysql:
-  docker_image_repository: mysql # docker image for the mysql
-  docker_image_tag: 5.7 # image tag
-  replicaCount: 2 # number of replicas to run for an app
-  port: 3306
-  type: ClusterIP # type of service to be created for an app, by default it is ClusterIP
-
-mysqlresources: # specify the resources required by an app on startup
-  requests:
-    storage: 1Gi
