@@ -42,3 +42,6 @@ resources: # specify the resources required by an app on startup
   requests:
     cpu: 100m
     memory: 100Mi
+
+ingress:
+  hostname: hunger-station.info
