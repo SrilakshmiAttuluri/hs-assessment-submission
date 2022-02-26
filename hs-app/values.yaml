@@ -14,7 +14,7 @@ healthcheck: # to enable liveness and readiness probes
   failureThreshold: 5
 
 env:  # to create configmaps which holds env values for app
-  MYSQL_USER: root
+  MYSQL_USER: srilakshmi
   MYSQL_DATABASE: employees
 secret_env: # will create secret in kubernetes for the app
   MYSQL_ROOT_PASSWORD: srilu #(pass values from key vault)
