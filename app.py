@@ -16,22 +16,24 @@ def hello():
     return "Welcome to Hunger Station!"
 
 
-@app.route("/Authenticate")
+@app.route('/login')
 def Authenticate():
-    username = request.args.get('Username')
-    password = request.args.get('Password')
     try:
+      dbconfig = {
+        "database": os.getenv('MYSQL_DATABASE'),
+        "user": os.getenv('MYSQL_USER'),
+        "password": os.getenv('MYSQL_ROOT_PASSWORD'),
+        "host":'db'
+      }
       connection_pool = pooling.MySQLConnectionPool(pool_name="hs_pool",
                                                   pool_size=5,
                                                   pool_reset_session=True,
-                                                  host='db',
-                                                  database=os.env('MYSQL_DATABASE'),
-                                                  user=os.env('MYSQL_USER'),
-                                                  password=os.env('MYSQL_ROOT_PASSWORD'),
-                                                  auth_plugin='mysql_native_password')
+                                                  auth_plugin='mysql_native_password',
+                                                  **dbconfig)
       print("Printing connection pool properties ")
       print("Connection Pool Name - ", connection_pool.pool_name)
       print("Connection Pool Size - ", connection_pool.pool_size)
+
 
       # Get connection object from a pool
       connection_object = connection_pool.get_connection()
@@ -41,12 +43,12 @@ def Authenticate():
         print("Connected to MySQL database using connection pool ... MySQL Server version on ", db_Info)
 
         cursor = connection_object.cursor()
-        cursor.execute("SELECT * from User where Username='" + username + "' and Password='" + password + "'")
-        record = cursor.fetchone()
-        if record is None:
-            return "Username or Password is wrong"
+        cursor.execute("show databases;")
+        record = cursor.fetchall()
+        if len(record) > 0:
+          return "MYSQL connection success"
         else:
-            return "Logged in successfully"
+          return "MYSQL connection failed"
     except Error as e:
       print("Error while connecting to MySQL using Connection pool ", e)
     finally:

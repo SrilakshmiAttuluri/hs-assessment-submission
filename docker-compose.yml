@@ -29,3 +29,8 @@ services:
           - db
         networks:
           - hs-network
+        environment:
+            MYSQL_ROOT_PASSWORD: srilu
+            MYSQL_DATABASE: employees
+            MYSQL_USER: srilakshmi
+            MYSQL_PASSWORD: srilu
