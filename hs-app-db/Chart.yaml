@@ -1,7 +1,0 @@
-apiVersion: v1
-name: mysql
-description: A Helm chart for Mysql database 
-name: hs-app-db
-version: 0.0.1
-maintainers:
-  - name: srilakshmi

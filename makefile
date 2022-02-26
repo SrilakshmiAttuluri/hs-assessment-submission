@@ -1,13 +1,15 @@
-dockercompose:
+.PHONY: build up down lint deploy uninstall
+
+build:
+	@docker-compose build
+up:
 	@docker-compose up
-dockercomposedown:
+down:
 	@docker-compose down
-helmdb: 
-	@helm install hs-app-db hs-app-db/ -f hs-app-db/values.yaml
-helmapp:
-	@helm install hs-app hs-app/ -f hs-app/values.yaml
-helmdbuninstall:
-	@helm uninstall hs-app-db
-helmappuninstall:
+lint:
+	@helm lint hs-app
+install:
+	@helm upgrade --install hs-app hs-app/ -f hs-app/values.yaml -n default
+uninstall:
 	@helm uninstall hs-app
 

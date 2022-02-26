@@ -1,7 +1,19 @@
+mysql:
+  enable: true
+  auth:
+    database: employees
+    rootPassword: srilu
+    username: srilakshmi
+    password: srilu
+  primary:
+    persistence:
+      enabled: true
+      size: "1Gi"
+
 service:    # Required to create a deployment for the app
   docker_image_repository: srilakshmiattuluri/hsassessment # docker image for the app
   docker_image_tag: latest # image tag
-  docker_image_pullPolicy: IfNotPresent 
+  docker_image_pullPolicy: Always 
   customStartUp: null # if need to excute a specific command on pod startup
   replicaCount: 1 # number of replicas to run for an app
   port: 4444
@@ -16,8 +28,9 @@ healthcheck: # to enable liveness and readiness probes
 env:  # to create configmaps which holds env values for app
   MYSQL_USER: srilakshmi
   MYSQL_DATABASE: employees
+  MYSQL_HOST: hs-app-mysql
 secret_env: # will create secret in kubernetes for the app
-  MYSQL_ROOT_PASSWORD: srilu #(pass values from key vault)
+  MYSQL_PASSWORD: srilu #(pass values from key vault)
 
 autoscaling: # to scale the pods automatically
   minReplicas: 1

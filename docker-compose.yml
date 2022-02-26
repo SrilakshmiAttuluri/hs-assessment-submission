@@ -5,32 +5,34 @@ networks:
     driver: bridge
 
 services:
-    db:
-        container_name: hs-mydb
-        image: mysql:5.7
-        ports:
-            - "3306:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: srilu
-            MYSQL_DATABASE: employees
-            MYSQL_USER: srilakshmi
-            MYSQL_PASSWORD: srilu
-        networks:
-            - hs-network
-
     app:
-        container_name: hs-webapp-new
-        build:
-          context: .
-          dockerfile: Dockerfile
-        ports:
-            - "4444:4444"
-        depends_on:
-          - db
-        networks:
-          - hs-network
-        environment:
-            MYSQL_ROOT_PASSWORD: srilu
-            MYSQL_DATABASE: employees
-            MYSQL_USER: srilakshmi
-            MYSQL_PASSWORD: srilu
+      image: srilakshmiattuluri/hsassessment:latest
+      container_name: hs-webapp-new
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "4444:4444"
+      depends_on:
+      - db
+      networks:
+      - hs-network
+      environment:
+        MYSQL_ROOT_PASSWORD: srilu
+        MYSQL_DATABASE: employees
+        MYSQL_USER: srilakshmi
+        MYSQL_PASSWORD: srilu
+        MYSQL_HOST: db
+
+    db:
+      container_name: hs-db
+      image: mysql:5.7
+      ports:
+      - "3306:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: srilu
+        MYSQL_DATABASE: employees
+        MYSQL_USER: srilakshmi
+        MYSQL_PASSWORD: srilu
+      networks:
+      - hs-network
